@@ -1,0 +1,128 @@
+/* Container for the entire recipe list page */
+.recipe-list-container {
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Heading for the recipes page */
+.recipe-heading {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px; /* Adjusted margin to reduce space */
+  color: #333;
+}
+
+/* Search bar container */
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px; /* Reduced margin to bring search bar closer */
+}
+
+/* Search input styling */
+.search-input {
+  width: 80%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+/* Focus effect on search input */
+.search-input:focus {
+  border-color: #5c6bc0;
+}
+
+/* Container for each recipe item */
+.recipe-items-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+/* Individual recipe card */
+.recipe-container {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 320px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Recipe image styling - fixed size for consistency */
+.recipe-image {
+  width: 100%;
+  height: 200px; /* Fixed height for all images */
+  object-fit: cover; /* Ensures image maintains aspect ratio */
+  border-radius: 8px;
+}
+
+/* Recipe title styling */
+.recipe-container h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #333;
+}
+
+/* Ingredients styling */
+.ingredients {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* Instructions styling */
+.instructions {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit the number of lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Average rating styling */
+.average-rating {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #f39c12;
+  margin-bottom: 15px;
+}
+
+/* Add review button styling */
+.add-review-btn {
+  background-color: #5c6bc0;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for add review button */
+.add-review-btn:hover {
+  background-color: #3f51b5;
+}
+
+/* No recipes found message styling */
+p {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Hover effect for recipe cards */
+.recipe-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
