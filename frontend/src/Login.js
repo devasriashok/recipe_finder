@@ -40,8 +40,15 @@ const Login = ({ onLogin }) => {
     }
   };
 
+  const navigateToSignup = () => {
+    navigate('/');
+  };
+
   return (
     <div className="login-page"> {/* Unique class for this component */}
+      <button onClick={navigateToSignup} className="signup-button">
+        Sign Up
+      </button>
       <div className="login-container">
         <h2 className="login-heading">Login</h2>
         <form onSubmit={handleSubmit} className="login-form">

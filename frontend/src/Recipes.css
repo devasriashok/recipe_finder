@@ -2,39 +2,48 @@
 .recipe-list-container {
   padding: 20px;
   font-family: 'Arial', sans-serif;
+  background-color: #fafafa; /* Light background for better readability */
+  line-height: 1.6; /* Improved line height for better readability */
+  color: #333; /* Soft black text color */
 }
 
 /* Heading for the recipes page */
 .recipe-heading {
   text-align: center;
-  font-size: 2rem;
-  margin-bottom: 20px; /* Adjusted margin to reduce space */
-  color: #333;
+  font-size: 2.5rem; /* Larger font size for better visibility */
+  margin-bottom: 20px;
+  color: #2c3e50; /* Darker color for better contrast */
+  font-weight: bold; /* Bold for emphasis */
+  letter-spacing: 1px; /* Slightly increased letter spacing for better readability */
+  text-transform: uppercase; /* Uppercase for a modern feel */
 }
 
 /* Search bar container */
 .search-container {
   display: flex;
   justify-content: center;
-  margin-top: 10px; /* Reduced margin to bring search bar closer */
+  margin: 15px 0; /* Balanced margin for spacing */
 }
 
 /* Search input styling */
 .search-input {
   width: 80%;
-  padding: 10px;
-  font-size: 1rem;
+  max-width: 500px; /* Limits the search bar width on larger screens */
+  padding: 12px;
+  font-size: 1.2rem; /* Slightly larger font for better readability */
   border-radius: 5px;
   border: 1px solid #ddd;
   outline: none;
+  transition: border-color 0.3s ease;
 }
 
 /* Focus effect on search input */
 .search-input:focus {
-  border-color: #5c6bc0;
+  border-color: #3498db; /* Blue border for focus state */
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
-/* Container for each recipe item */
+/* Container for recipe items */
 .recipe-items-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -47,82 +56,199 @@
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #fff; /* White background for card contrast */
   text-align: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
   max-width: 320px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Roboto', sans-serif; /* Clean and modern font for the cards */
 }
 
-/* Recipe image styling - fixed size for consistency */
+/* Recipe image styling */
 .recipe-image {
   width: 100%;
-  height: 200px; /* Fixed height for all images */
+  height: 180px; /* Reduced height for a more appealing size */
   object-fit: cover; /* Ensures image maintains aspect ratio */
   border-radius: 8px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease; /* Subtle zoom effect on hover */
+}
+
+/* Hover effect for recipe image */
+.recipe-image:hover {
+  transform: scale(1.05); /* Slightly enlarge the image on hover */
 }
 
 /* Recipe title styling */
 .recipe-container h3 {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin: 10px 0;
-  color: #333;
+  font-size: 1.5rem; /* Slightly larger font size for recipe titles */
+  font-weight: 600; /* Bold font weight for emphasis */
+  margin: 15px 0;
+  color: #120e1a;
+  text-transform: capitalize; /* Capitalize each word */
+  letter-spacing: 1px;
 }
 
 /* Ingredients styling */
 .ingredients {
-  font-size: 0.95rem;
+  font-size: 1rem; /* Improved font size for readability */
   color: #555;
   margin-bottom: 10px;
+  text-align: left; /* Align text to the left for better readability */
+  line-height: 1.5; /* Improved line spacing for clarity */
 }
 
 /* Instructions styling */
 .instructions {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #777;
   margin-bottom: 10px;
+  text-align: left; /* Align text to the left for better readability */
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Limit the number of lines */
+  -webkit-line-clamp: 3; /* Limits the number of visible lines */
   -webkit-box-orient: vertical;
   overflow: hidden;
+  letter-spacing: 0.5px; /* Slight letter spacing for readability */
+  line-height: 1.6;
 }
 
 /* Average rating styling */
 .average-rating {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #f39c12;
-  margin-bottom: 15px;
+  font-size: 1.2rem;
+  
+  color: black;
+  margin-bottom: 10px; /* Reduced margin for better alignment */
+  text-transform: italic; /* Uppercase for emphasis */
+  letter-spacing: 1px;
 }
 
 /* Add review button styling */
 .add-review-btn {
-  background-color: #5c6bc0;
-  color: #fff;
-  padding: 10px 20px;
-  font-size: 1rem;
+  background-color: white;
+  color: #f39c12;
+  padding: 12px 20px;
+  font-size: 1.1rem; /* Slightly larger font for buttons */
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 10px; /* Adds space above the button */
+  font-family: 'Roboto', sans-serif;
 }
 
 /* Hover effect for add review button */
 .add-review-btn:hover {
-  background-color: #3f51b5;
+  background-color: #f39c12; /* Change background color on hover */
+  color: white; /* Change text color on hover */
+  transform: translateY(-2px); /* Slight lift effect */
 }
 
 /* No recipes found message styling */
 p {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.3rem; /* Larger font for no recipe message */
   color: #666;
+  font-weight: 500;
 }
 
 /* Hover effect for recipe cards */
 .recipe-container:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Detailed recipe view styles */
+.recipe-details-container {
+  width: 60%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f39c12;
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Recipe detail image styling */
+.recipe-detail-image {
+  width: auto; /* Maintain aspect ratio */
+  max-width: 1000px; /* Limit the maximum width */
+  max-height: 350px; /* Limit the maximum height */
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: block; /* Makes the image behave like a block element */
+  margin-left: auto;
+  margin-right: auto; /* Center the image */
+  transition: all 0.3s ease; /* Smooth transition for resizing */
+  cursor: pointer; /* Indicate it's clickable */
+}
+
+/* Reduce size when the image is clicked */
+.recipe-detail-image:active {
+  max-width: 250px; /* Slightly reduce width when clicked */
+  max-height: 150px; /* Slightly reduce height when clicked */
+  transform: scale(0.95); /* Slight scale effect */
+}
+
+/* Back button styling */
+.back-btn {
+  background-color: #fff;
+  color: #f39c12;
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-bottom: 20px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.back-btn:hover {
+  background-color: #f39c12;
+  color: white; /* Change text color to white on hover */
+}
+
+/* Delete button styling in recipe details */
+.delete-btn {
+  background-color: #e74c3c; /* Red background to indicate danger */
+  color: white; /* White text for contrast */
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-family: 'Roboto', sans-serif;
+  margin-top: 20px; /* Space above the delete button */
+}
+
+/* Hover effect for delete button */
+.delete-btn:hover {
+  background-color: #c0392b; /* Darker red on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Styles for the Delete button at the top of recipe details */
+.logout-btn {
+  padding: 10px 15px;
+  font-size: 1em;
+  color: #fff;
+  background-color: #ff6f61;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #e85a50;
+}
+.logout-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
 }

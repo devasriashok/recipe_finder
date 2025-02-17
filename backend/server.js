@@ -177,6 +177,27 @@ app.post('/add-review', async (req, res) => {
   }
 });
 
+
+// Delete Recipe
+app.post('/recipes/delete', async (req, res) => {
+  const { recipeIds, chefId } = req.body;
+
+  if (!chefId) {
+    return res.status(400).json({ success: false, message: 'Chef ID is required.' });
+  }
+
+  const recipesToDelete = await Recipe.find({ _id: { $in: recipeIds } });
+
+  const invalidRecipes = recipesToDelete.filter((recipe) => recipe.chefId !== chefId);
+  if (invalidRecipes.length > 0) {
+    return res.status(403).json({ success: false, message: 'Invalid Chef ID for one or more recipes.' });
+  }
+
+  await Recipe.deleteMany({ _id: { $in: recipeIds } });
+  res.json({ success: true, message: 'Recipes deleted successfully.' });
+});
+
+
 // Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
