@@ -1,52 +1,43 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
 app.use(bodyParser.json());
-
-const cors = require('cors');
 app.use(cors()); // Enable CORS for all routes
 
-// MongoDB configuration
-const MONGO_URI = 'mongodb://localhost:27017/recipe_finder'; // Replace with your MongoDB connection string
+// MongoDB Connection
+const MONGO_URI = 'mongodb://localhost:27017/recipe_finder'; // Update if needed
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
-// Define Mongoose schemas
+// Define Mongoose Schemas
 const UserSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-  passwordHash: String,
-  role: String,
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  passwordHash: { type: String, required: true },
+  role: { type: String, required: true },
 });
 
 const RecipeSchema = new mongoose.Schema({
-  title: String,
+  title: { type: String, required: true, unique: true },
   ingredients: [String],
-  instructions: String,
-  chefId: String,
-  imageUrl: String, // New field for the image URL
-  reviews: [{ rating: Number, comment: String }], // Store reviews here
-  averageRating: { type: Number, default: 0 }, // Field for average rating
-});
-
-const ReviewSchema = new mongoose.Schema({
-  recipeId: mongoose.Schema.Types.ObjectId,
-  userId: mongoose.Schema.Types.ObjectId,
-  rating: Number,
-  comment: String,
+  instructions: { type: String, required: true },
+  chefId: { type: String, required: true },
+  imageUrl: { type: String, required: true }, // URL for the image
+  reviews: [{ rating: Number, comment: String }], // Reviews array
+  averageRating: { type: Number, default: 0 }, // Avg rating field
 });
 
 const User = mongoose.model('User', UserSchema);
 const Recipe = mongoose.model('Recipe', RecipeSchema);
-const Review = mongoose.model('Review', ReviewSchema);
 
-// Routes and APIs
+// ========== Routes & APIs ==========
 
-// Sign Up
+// User Signup
 app.post('/signup', async (req, res) => {
   try {
     const { username, email, password, role } = req.body;
@@ -69,7 +60,7 @@ app.post('/signup', async (req, res) => {
   }
 });
 
-// Login
+// User Login
 app.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -88,95 +79,79 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Add Recipe with Image URL
+// Add Recipe
 app.post('/add-recipe', async (req, res) => {
   try {
     const { title, ingredients, instructions, chefId, imageUrl } = req.body;
-
-    // Check if all required fields are provided
     if (!title || !ingredients || !instructions || !chefId || !imageUrl) {
       return res.status(400).json({ error: 'All fields are required.' });
     }
 
-    // Create a new recipe object and save it to the database
     const newRecipe = new Recipe({
       title,
-      ingredients: JSON.parse(ingredients), // Ensure ingredients is an array
+      ingredients: JSON.parse(ingredients), // Ensure it's an array
       instructions,
       chefId,
-      imageUrl, // Save the provided image URL
-      reviews: [], // Initialize with an empty reviews array
-      averageRating: 0, // Set initial average rating to 0
+      imageUrl,
+      reviews: [],
+      averageRating: 0,
     });
 
     await newRecipe.save();
-
-    // Return success message upon successful recipe creation
     res.status(201).json({ message: 'Recipe added successfully!', recipe: newRecipe });
   } catch (err) {
-    // Handle any errors that might occur during the database operation
     res.status(500).json({ error: 'An error occurred while adding the recipe.', details: err.message });
   }
 });
 
-// Get Recipes
+// Get All Recipes
 app.get('/recipes', async (req, res) => {
   try {
     const recipes = await Recipe.find();
-    const formattedRecipes = recipes.map(recipe => ({
-      id: recipe._id,
-      title: recipe.title,
-      ingredients: recipe.ingredients,
-      instructions: recipe.instructions,
-      imageUrl: recipe.imageUrl, // Include image URL in the response
-      averageRating: recipe.averageRating, // Include average rating in the response
-    }));
-
-    res.status(200).json(formattedRecipes);
+    res.status(200).json(recipes);
   } catch (err) {
     res.status(500).json({ error: 'An error occurred while fetching recipes.', details: err.message });
   }
 });
 
-// Add Review
-// Add Review
-app.post('/add-review', async (req, res) => {
-  const { recipeName, rating, comment } = req.body;
-  
-  if (!recipeName || !rating || !comment) {
-    return res.status(400).json({ error: 'All fields are required.' });
-  }
-
+// Get Recipe by Title
+app.get('/recipe/:title', async (req, res) => {
   try {
-    // Find the recipe by title
-    const recipe = await Recipe.findOne({ title: recipeName });
+    const recipe = await Recipe.findOne({ title: req.params.title });
+    if (!recipe) {
+      return res.status(404).json({ error: 'Recipe not found' });
+    }
+    res.status(200).json(recipe);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching recipe.', details: err.message });
+  }
+});
 
+// Add Review to a Recipe
+app.post('/add-review', async (req, res) => {
+  try {
+    const { recipeName, rating, comment } = req.body;
+    if (!recipeName || !rating || !comment) {
+      return res.status(400).json({ error: 'All fields are required.' });
+    }
+
+    const recipe = await Recipe.findOne({ title: recipeName });
     if (!recipe) {
       return res.status(404).json({ error: 'Recipe not found' });
     }
 
-    // Add the review to the recipe's reviews array
-    const newReview = {
-      rating: parseInt(rating, 10), // Ensure rating is a number
-      comment,
-    };
-
-    recipe.reviews.push(newReview);
-
-    // Update the average rating
+    recipe.reviews.push({ rating: parseInt(rating, 10), comment });
     const totalRatings = recipe.reviews.reduce((acc, review) => acc + review.rating, 0);
     recipe.averageRating = totalRatings / recipe.reviews.length;
-
-    // Save the updated recipe
+    
     await recipe.save();
-
     res.status(200).json({ message: 'Review added successfully' });
   } catch (err) {
-    console.error('Error adding review:', err);
     res.status(500).json({ error: 'Failed to add review.', details: err.message });
   }
 });
 
+<<<<<<< HEAD
 
 // Delete Recipe
 app.post('/recipes/delete', async (req, res) => {
@@ -200,6 +175,36 @@ app.post('/recipes/delete', async (req, res) => {
 
 // Start the server
 const PORT = 3000;
+=======
+// Delete Recipe
+app.delete('/delete-recipe/:id', async (req, res) => {
+  try {
+    const deletedRecipe = await Recipe.findByIdAndDelete(req.params.id);
+    if (!deletedRecipe) {
+      return res.status(404).json({ error: 'Recipe not found' });
+    }
+    res.status(200).json({ message: 'Recipe deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error deleting recipe.', details: err.message });
+  }
+});
+
+// Update Recipe
+app.put('/update-recipe/:id', async (req, res) => {
+  try {
+    const updatedRecipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedRecipe) {
+      return res.status(404).json({ error: 'Recipe not found' });
+    }
+    res.status(200).json({ message: 'Recipe updated successfully', recipe: updatedRecipe });
+  } catch (err) {
+    res.status(500).json({ error: 'Error updating recipe.', details: err.message });
+  }
+});
+
+// Server Start
+const PORT = process.env.PORT || 4000; // Change to 4000 or another free port
+>>>>>>> e96791390e90c23eaa778eea060af5b518b05aa9
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
